@@ -58,7 +58,24 @@ public class Utilidades {
         }
         return MC;
     }
-//    
+    
+    // split lista probabilidades
+
+    /**
+     *
+     * @param prob lista de probabilidades en formato cadena en la cual cada linea representa una probabilidad
+     * @return arreglo de probabilidades
+     */
+    public double[] getProbabilidades(String prob)
+    {
+        double[] probabilidades = new double[prob.split("\n").length];
+        String[][] cadSplit = new String[prob.split("\n").length][2];
+        for (int i=0; i<cadSplit.length; i++) {
+            cadSplit[i] = prob.split("\n")[i].split("-");
+            probabilidades[i] = Double.parseDouble(cadSplit[i][1]);
+        }
+        return probabilidades;
+    }
     // Utilidad para preparar archivo
     
     // Utilidad para escribir en el archivo
