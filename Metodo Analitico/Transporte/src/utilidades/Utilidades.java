@@ -76,6 +76,22 @@ public class Utilidades {
         }
         return probabilidades;
     }
+    
+    /**
+     *
+     * @param prob arreglo de probabilidades ingresados por el usuario
+     * @return arreglo de probabilidades acumuladas
+     */
+    public double[] getProbabilidadesAcumuladas(double[] prob)
+    {
+        double[] PAC = new double[prob.length];
+        PAC[0]=prob[0];
+        for (int i = 1 ; i < prob.length; i++) {
+            PAC[1] = PAC[i-1] + prob[i];
+        }
+        return PAC;
+    }
+    
     // Utilidad para preparar archivo
     
     // Utilidad para escribir en el archivo
