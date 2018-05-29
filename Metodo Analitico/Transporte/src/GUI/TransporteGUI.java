@@ -8,19 +8,34 @@ package GUI;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map.Entry;
+import javax.swing.DefaultListModel;
+import javax.swing.ListModel;
+import transporte.Modelo;
 
 /**
  *
  * @author urc
  */
 public class TransporteGUI extends javax.swing.JFrame {
-
+    // Objeto que se va a encargar de resolver el problema
+    Modelo modelo;
+    private int V0, V1, V2, a, c, k, m, n, cantMC;
+    private double intervaloMIN, intervaloMAX;
+    private String metodo;
+    
+    /*
+        Variables del modelo de Transporte
+    */
+    private int TOTC;
+    private double[] VECM, VECP, VECPAC;
+    
     /**
      * Creates new form TransporteGUI
      */
     public TransporteGUI() {
         initComponents();
         this.configurar(this.cmbMetodos.getSelectedItem().toString());
+        this.modelo = new Modelo(this.cmbMetodos.getSelectedItem().toString());
     }
 
     /**
@@ -62,16 +77,16 @@ public class TransporteGUI extends javax.swing.JFrame {
         txtIntMAX = new javax.swing.JTextField();
         jLabel11 = new javax.swing.JLabel();
         jPanel6 = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList<>();
         jLabel12 = new javax.swing.JLabel();
         txtProb = new javax.swing.JTextField();
         jLabel13 = new javax.swing.JLabel();
         jLabel14 = new javax.swing.JLabel();
         txtProbAcumulada = new javax.swing.JTextField();
         jLabel15 = new javax.swing.JLabel();
-        jButton3 = new javax.swing.JButton();
-        cantidadProbabilidadesPendiente = new javax.swing.JLabel();
+        addProbabilidad = new javax.swing.JButton();
+        lblCantidadProbabilidadesPendiente = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        lstProbabilidades = new javax.swing.JTextArea();
         salir = new javax.swing.JButton();
         simular = new javax.swing.JButton();
 
@@ -231,9 +246,9 @@ public class TransporteGUI extends javax.swing.JFrame {
 
         jLabel9.setText("Cantidad Marcas de clase:");
 
-        txtCantMC.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtCantMCActionPerformed(evt);
+        txtCantMC.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtCantMCFocusLost(evt);
             }
         });
 
@@ -278,32 +293,28 @@ public class TransporteGUI extends javax.swing.JFrame {
 
         jPanel6.setBorder(javax.swing.BorderFactory.createTitledBorder("Probabilidades"));
 
-        jScrollPane1.setViewportView(jList1);
-
         jLabel12.setText("Probabilidad: ");
 
         txtProb.setToolTipText("");
-        txtProb.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtProbActionPerformed(evt);
-            }
-        });
 
         jLabel13.setText("%");
 
         jLabel14.setText("Probabilidad acumulada: ");
 
-        txtProbAcumulada.addActionListener(new java.awt.event.ActionListener() {
+        jLabel15.setText("%");
+
+        addProbabilidad.setText("+");
+        addProbabilidad.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtProbAcumuladaActionPerformed(evt);
+                addProbabilidadActionPerformed(evt);
             }
         });
 
-        jLabel15.setText("%");
+        lblCantidadProbabilidadesPendiente.setText("cant");
 
-        jButton3.setText("+");
-
-        cantidadProbabilidadesPendiente.setText("cant");
+        lstProbabilidades.setColumns(20);
+        lstProbabilidades.setRows(5);
+        jScrollPane2.setViewportView(lstProbabilidades);
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
@@ -312,7 +323,7 @@ public class TransporteGUI extends javax.swing.JFrame {
             .addGroup(jPanel6Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1)
+                    .addComponent(jScrollPane2)
                     .addGroup(jPanel6Layout.createSequentialGroup()
                         .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel6Layout.createSequentialGroup()
@@ -329,8 +340,8 @@ public class TransporteGUI extends javax.swing.JFrame {
                             .addComponent(jLabel15, javax.swing.GroupLayout.Alignment.TRAILING))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE)
-                            .addComponent(cantidadProbabilidadesPendiente, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                            .addComponent(lblCantidadProbabilidadesPendiente, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE)
+                            .addComponent(addProbabilidad, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap())
         );
         jPanel6Layout.setVerticalGroup(
@@ -342,18 +353,16 @@ public class TransporteGUI extends javax.swing.JFrame {
                         .addComponent(jLabel12)
                         .addComponent(txtProb)
                         .addComponent(jLabel13))
-                    .addGroup(jPanel6Layout.createSequentialGroup()
-                        .addComponent(jButton3)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                    .addComponent(addProbabilidad, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel14)
                     .addComponent(txtProbAcumulada, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel15)
-                    .addComponent(cantidadProbabilidadesPendiente))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                    .addComponent(lblCantidadProbabilidadesPendiente))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(26, 26, 26))
         );
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
@@ -373,7 +382,7 @@ public class TransporteGUI extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, 306, Short.MAX_VALUE)
+                .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -420,23 +429,36 @@ public class TransporteGUI extends javax.swing.JFrame {
     private void cmbMetodosItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cmbMetodosItemStateChanged
         System.out.println("Elemento del Combo: "+ this.cmbMetodos.getSelectedItem().toString());
         this.configurar(this.cmbMetodos.getSelectedItem().toString());
+        // Actualizamos el metodo que se usa para el modelo en el cambio del combo de metodos
+        this.modelo = new Modelo(this.cmbMetodos.getSelectedItem().toString());
     }//GEN-LAST:event_cmbMetodosItemStateChanged
-
-    private void txtProbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtProbActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtProbActionPerformed
-
-    private void txtProbAcumuladaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtProbAcumuladaActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtProbAcumuladaActionPerformed
 
     private void salirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_salirActionPerformed
         this.dispose();
     }//GEN-LAST:event_salirActionPerformed
 
-    private void txtCantMCActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCantMCActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtCantMCActionPerformed
+    private void addProbabilidadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addProbabilidadActionPerformed
+        if ("".equals(this.txtCantMC.getText()) || this.txtCantMC.getText() == null ) {
+            System.err.println("Se debe proporcionar las cantidad de marcas de clase a la cual\nsera mapeada cada probabilidad que se ingrese.");
+        }
+        if ("".equals(this.txtIntMAX.getText()) || this.txtIntMAX.getText() == null || "".equals(this.txtIntMIN.getText()) || this.txtIntMIN.getText() == null) {
+            System.err.println("Se debe proporcionar un limite inferior y un limite superior\npara determinar el rango del intervalo.");
+        }
+        
+        System.out.println("lstProbabilidades: "+this.lstProbabilidades.getText());
+        setConfigMC(this.cantMC, this.intervaloMAX, this.intervaloMIN);
+        
+        int nuevaCant = Integer.parseInt(this.lblCantidadProbabilidadesPendiente.getText());
+        if (!"0".equals(this.lblCantidadProbabilidadesPendiente.getText())) {
+            this.lstProbabilidades.setText(this.lstProbabilidades.getText()+"\n"+this.txtProb.getText());
+            nuevaCant = Integer.parseInt(this.lblCantidadProbabilidadesPendiente.getText()) - 1;
+        }
+        this.lblCantidadProbabilidadesPendiente.setText(String.valueOf(nuevaCant));
+    }//GEN-LAST:event_addProbabilidadActionPerformed
+
+    private void txtCantMCFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCantMCFocusLost
+        this.lblCantidadProbabilidadesPendiente.setText(this.txtCantMC.getText());
+    }//GEN-LAST:event_txtCantMCFocusLost
 
     private void configurar(String metodo_seleccionado)
     {
@@ -482,10 +504,15 @@ public class TransporteGUI extends javax.swing.JFrame {
         }
     }
 
+    private void setConfigMC(int cantMC, double IMax, double IMin)
+    {
+        this.cantMC = this.txtCantMC.getText() != null ? Integer.parseInt(this.txtCantMC.getText()) : 0; // tambien se podria poner 6 para que por defecto resuelva el caso del escenario
+        this.intervaloMAX = new Double(this.txtIntMAX.getText());
+        this.intervaloMIN = new Double(this.txtIntMIN.getText());
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel cantidadProbabilidadesPendiente;
+    private javax.swing.JButton addProbabilidad;
     private javax.swing.JComboBox<String> cmbMetodos;
-    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -501,15 +528,16 @@ public class TransporteGUI extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
-    private javax.swing.JList<String> jList1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
-    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JLabel lblCantidadProbabilidadesPendiente;
+    private javax.swing.JTextArea lstProbabilidades;
     private javax.swing.JButton salir;
     private javax.swing.JButton simular;
     private javax.swing.JTextField txtA;

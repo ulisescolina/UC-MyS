@@ -20,7 +20,7 @@ public class Modelo {
         Variables del modelo de Transporte
     */
     private int TOTC;
-    private double[] VECM, VECP;
+    private double[] VECM, VECP, VECPAC;
     
     public Modelo(String metodo) {
         this.metodo = metodo;
@@ -61,6 +61,12 @@ public class Modelo {
         }
         
     }
+
+    public void setMetodo(String metodo) {
+        this.metodo = metodo;
+    }
+    
+    
     
 }
 
