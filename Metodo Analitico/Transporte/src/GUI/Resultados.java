@@ -5,18 +5,24 @@
  */
 package GUI;
 
+import transporte.Modelo;
+import utilidades.Utilidades;
+
 /**
  *
  * @author urc
  */
 public class Resultados extends javax.swing.JFrame {
     TransporteGUI tGUI;
+    Modelo modelo;
     /**
      * Creates new form Resultados
      */
-    public Resultados(TransporteGUI tgui) {
+    public Resultados(TransporteGUI tgui, Modelo m) {
         initComponents();
         this.tGUI = tgui;
+        this.modelo = m;
+        this.configurar(m);
     }
 
     /**
@@ -29,15 +35,15 @@ public class Resultados extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        lstNAG = new javax.swing.JList<>();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        lstNAG = new javax.swing.JTextArea();
         jPanel2 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        lstFreqObMC = new javax.swing.JList<>();
+        jScrollPane6 = new javax.swing.JScrollPane();
+        lstFrecObsMC = new javax.swing.JTextArea();
         jPanel4 = new javax.swing.JPanel();
-        jScrollPane3 = new javax.swing.JScrollPane();
-        lstPesosGEN = new javax.swing.JList<>();
+        jScrollPane5 = new javax.swing.JScrollPane();
+        lstPesosCarga = new javax.swing.JTextArea();
         lblTOTC = new javax.swing.JLabel();
         btnVolver = new javax.swing.JButton();
         jPanel5 = new javax.swing.JPanel();
@@ -49,13 +55,16 @@ public class Resultados extends javax.swing.JFrame {
         lblV0 = new javax.swing.JLabel();
         lblM = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
-        lblTamMuestra = new javax.swing.JLabel();
+        lblN = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Numeros Aleatorios Generados"));
 
-        jScrollPane1.setViewportView(lstNAG);
+        lstNAG.setEditable(false);
+        lstNAG.setColumns(20);
+        lstNAG.setRows(5);
+        jScrollPane4.setViewportView(lstNAG);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -63,65 +72,64 @@ public class Resultados extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1)
+                .addComponent(jScrollPane4)
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(13, Short.MAX_VALUE))
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 119, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Informacion de Carga"));
 
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("Frecuencias Observadas por MC"));
 
-        jScrollPane2.setViewportView(lstFreqObMC);
+        lstFrecObsMC.setEditable(false);
+        lstFrecObsMC.setColumns(20);
+        lstFrecObsMC.setRows(5);
+        jScrollPane6.setViewportView(lstFrecObsMC);
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 275, Short.MAX_VALUE)
-            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel3Layout.createSequentialGroup()
-                    .addContainerGap()
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 251, Short.MAX_VALUE)
-                    .addContainerGap()))
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane6)
+                .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 250, Short.MAX_VALUE)
-            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel3Layout.createSequentialGroup()
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 238, Short.MAX_VALUE)
-                    .addContainerGap()))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 226, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder("Pesos en la carga generada"));
 
-        jScrollPane3.setViewportView(lstPesosGEN);
+        lstPesosCarga.setEditable(false);
+        lstPesosCarga.setColumns(20);
+        lstPesosCarga.setRows(5);
+        jScrollPane5.setViewportView(lstPesosCarga);
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 275, Short.MAX_VALUE)
-            .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel4Layout.createSequentialGroup()
-                    .addContainerGap()
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 251, Short.MAX_VALUE)
-                    .addContainerGap()))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                .addContainerGap())
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-            .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel4Layout.createSequentialGroup()
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 238, Short.MAX_VALUE)
-                    .addContainerGap()))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane5)
+                .addContainerGap())
         );
 
         lblTOTC.setText("Total de Carga:");
@@ -166,7 +174,7 @@ public class Resultados extends javax.swing.JFrame {
 
         lblK.setText("k:");
 
-        lblC.setText("c: ");
+        lblC.setText("c:");
 
         lblV2.setText("V2:");
 
@@ -201,7 +209,7 @@ public class Resultados extends javax.swing.JFrame {
                     .addGroup(jPanel5Layout.createSequentialGroup()
                         .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lblTamMuestra, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addComponent(lblN, javax.swing.GroupLayout.DEFAULT_SIZE, 167, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel5Layout.setVerticalGroup(
@@ -226,7 +234,7 @@ public class Resultados extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(lblTamMuestra, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(lblN, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jLabel9))
                         .addGap(26, 26, 26))))
         );
@@ -258,10 +266,50 @@ public class Resultados extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    
     private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
+        this.modelo.getCARGA().clear();
         this.tGUI.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnVolverActionPerformed
+
+    private void configurar(Modelo m)
+    {
+        // Seteamos los labels con los parametros utilizados para la generacion
+        this.lblV0.setText(this.lblV0.getText()+" "+String.valueOf(m.getV0()));
+        this.lblV1.setText(this.lblV1.getText()+" "+String.valueOf(m.getV1()));
+        this.lblV2.setText(this.lblV2.getText()+" "+String.valueOf(m.getV2()));
+        this.lblA.setText(this.lblA.getText()+" "+String.valueOf(m.getA()));
+        this.lblC.setText(this.lblC.getText()+" "+String.valueOf(m.getC()));
+        this.lblK.setText(this.lblK.getText()+" "+String.valueOf(m.getK()));
+        this.lblM.setText(this.lblM.getText()+" "+String.valueOf(m.getM()));
+        this.lblN.setText(this.lblN.getText()+" "+String.valueOf(m.getN()));
+        
+        // Seteamos los parametros propios del problema, y ejecutamos la funcion para resolver el problema
+        // m.simular(): En su interior carga los vectores necesarios para el problema y realiza el algoritmo de clasificacion de los valores pseudoaleatorios generados
+        // esto devuelve una cadena que concatena los pesos que se obtuvieron
+        this.lstPesosCarga.setText(m.simular());
+        // Carga la lista de numeros aleatorios generados con el vector VECS
+        this.lstNAG.setText(Utilidades.imprimirArray(this.modelo.getVECS()));
+        // Carga la lista de frecuencias observadas por marcas de clase
+        this.lstFrecObsMC.setText(this.modelo.getFrecuenciasObservadas());
+        // Define el valor del label que representa el total de la carga
+        if ("".equals(this.lblTOTC.getText()) || this.lblTOTC.getText()==null) {
+            this.lblTOTC.setText(this.lblTOTC.getText() +" "+ String.valueOf(this.modelo.getTOTC()));
+        } else {
+            this.lblTOTC.setText("Total de Carga:");
+            this.lblTOTC.setText(this.lblTOTC.getText() +" "+ String.valueOf(this.modelo.getTOTC()));
+        }
+        
+        // Guardar en los archivos los datos necesarios para graficar el poligono de frecuencias
+        m.cadMCGraf(); // cadena que representa las marcas de clase generadas para el intervalo
+        m.fTeoricaGraf(); // cadena que representa los valores para la distribucion teorica
+        m.fObservadaGraf(); // cadena que representa los valores observados por marcas de clase tras la generacion
+    }
+    
+    
+    
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnVolver;
     private javax.swing.JLabel jLabel9;
@@ -270,20 +318,20 @@ public class Resultados extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JScrollPane jScrollPane5;
+    private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JLabel lblA;
     private javax.swing.JLabel lblC;
     private javax.swing.JLabel lblK;
     private javax.swing.JLabel lblM;
+    private javax.swing.JLabel lblN;
     private javax.swing.JLabel lblTOTC;
-    private javax.swing.JLabel lblTamMuestra;
     private javax.swing.JLabel lblV0;
     private javax.swing.JLabel lblV1;
     private javax.swing.JLabel lblV2;
-    private javax.swing.JList<String> lstFreqObMC;
-    private javax.swing.JList<String> lstNAG;
-    private javax.swing.JList<String> lstPesosGEN;
+    private javax.swing.JTextArea lstFrecObsMC;
+    private javax.swing.JTextArea lstNAG;
+    private javax.swing.JTextArea lstPesosCarga;
     // End of variables declaration//GEN-END:variables
 }

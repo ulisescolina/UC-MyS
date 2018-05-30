@@ -25,6 +25,7 @@ public final class Parametro {
         this.setPARAMETROS_MULTIPLICATIVO();
         this.setPARAMETROS_MIXTO();
         this.setPARAMETROS_FIBONACCI();        
+        this.setPARAMETROS_JAVARANDOM();        
     }
     
 
@@ -68,7 +69,7 @@ public final class Parametro {
         this.PARAMETROS_MIXTO.put("v2",false);
         this.PARAMETROS_MIXTO.put("a",true);
         this.PARAMETROS_MIXTO.put("c",true);
-        this.PARAMETROS_MIXTO.put("k",true);
+        this.PARAMETROS_MIXTO.put("k",false);
         this.PARAMETROS_MIXTO.put("m",true);
         this.PARAMETROS_MIXTO.put("n",true);
     }
@@ -92,7 +93,7 @@ public final class Parametro {
         this.PARAMETROS_JAVARANDOM.put("c",false);
         this.PARAMETROS_JAVARANDOM.put("k",false);
         this.PARAMETROS_JAVARANDOM.put("m",false);
-        this.PARAMETROS_JAVARANDOM.put("n",false);
+        this.PARAMETROS_JAVARANDOM.put("n",true);
     }
 
     // Getter de todos los parametros

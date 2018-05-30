@@ -20,6 +20,8 @@ public class TransporteGUI extends javax.swing.JFrame {
     // Objeto que se va a encargar de resolver el problema
     Modelo modelo;
     private int V0, V1, V2, a, c, k, m, n, cantMC;
+    private String probabilidades;
+    private int cantAsc = 1; // utilizado para la numeracion en el listado de probabilidades
     private double intervaloMIN, intervaloMAX;
     private String metodo;
     
@@ -35,7 +37,7 @@ public class TransporteGUI extends javax.swing.JFrame {
     public TransporteGUI() {
         initComponents();
         this.configurar(this.cmbMetodos.getSelectedItem().toString());
-        this.modelo = new Modelo(this.cmbMetodos.getSelectedItem().toString());
+        this.modelo = new Modelo(this.cmbMetodos.getSelectedItem().toString());    
     }
 
     /**
@@ -81,16 +83,17 @@ public class TransporteGUI extends javax.swing.JFrame {
         txtProb = new javax.swing.JTextField();
         jLabel13 = new javax.swing.JLabel();
         jLabel14 = new javax.swing.JLabel();
-        txtProbAcumulada = new javax.swing.JTextField();
-        jLabel15 = new javax.swing.JLabel();
+        lblProbAcumulada = new javax.swing.JLabel();
         addProbabilidad = new javax.swing.JButton();
         lblCantidadProbabilidadesPendiente = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         lstProbabilidades = new javax.swing.JTextArea();
+        jLabel15 = new javax.swing.JLabel();
+        limpiar = new javax.swing.JButton();
         salir = new javax.swing.JButton();
         simular = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Parametros"));
 
@@ -212,7 +215,7 @@ public class TransporteGUI extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        cmbMetodos.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Fundamental", "Aditivo", "Multiplicativo", "Mixto", "Fibonacci" }));
+        cmbMetodos.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Fundamental", "Aditivo", "Multiplicativo", "Mixto", "Fibonacci", "Java" }));
         cmbMetodos.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 cmbMetodosItemStateChanged(evt);
@@ -245,6 +248,7 @@ public class TransporteGUI extends javax.swing.JFrame {
         jPanel5.setBorder(javax.swing.BorderFactory.createTitledBorder("Configuracion Marcas de Clase"));
 
         jLabel9.setText("Cantidad Marcas de clase:");
+        jLabel9.setToolTipText("<html>\tSi la cantidad de probabilidades ingresada no es igual a la cantidad de marcas de clase <br>\n\tse rellenara a las marcas de clase superiores con probabilidad 0.<br><br>\n\tEJ: Si la cantidad de marcas de clase es de 4, y solo se ingresa un 20 como primer dato,<br>\n\tlas siguientes 3 marcas de clase se tomaran con probabilidad de 0%");
 
         txtCantMC.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
@@ -262,18 +266,21 @@ public class TransporteGUI extends javax.swing.JFrame {
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
-                .addContainerGap(39, Short.MAX_VALUE)
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel10)
-                    .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(txtIntMIN)
-                    .addComponent(txtCantMC, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel11)
-                .addGap(3, 3, 3)
-                .addComponent(txtIntMAX, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
+                        .addComponent(jLabel10)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtIntMIN, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel11)
+                        .addGap(3, 3, 3))
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(6, 6, 6)))
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(txtCantMC)
+                    .addComponent(txtIntMAX, javax.swing.GroupLayout.DEFAULT_SIZE, 74, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel5Layout.setVerticalGroup(
@@ -291,6 +298,8 @@ public class TransporteGUI extends javax.swing.JFrame {
                 .addGap(0, 8, Short.MAX_VALUE))
         );
 
+        jLabel9.getAccessibleContext().setAccessibleDescription("");
+
         jPanel6.setBorder(javax.swing.BorderFactory.createTitledBorder("Probabilidades"));
 
         jLabel12.setText("Probabilidad: ");
@@ -301,7 +310,8 @@ public class TransporteGUI extends javax.swing.JFrame {
 
         jLabel14.setText("Probabilidad acumulada: ");
 
-        jLabel15.setText("%");
+        lblProbAcumulada.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        lblProbAcumulada.setText("0");
 
         addProbabilidad.setText("+");
         addProbabilidad.addActionListener(new java.awt.event.ActionListener() {
@@ -310,11 +320,21 @@ public class TransporteGUI extends javax.swing.JFrame {
             }
         });
 
+        lblCantidadProbabilidadesPendiente.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         lblCantidadProbabilidadesPendiente.setText("cant");
 
         lstProbabilidades.setColumns(20);
         lstProbabilidades.setRows(5);
         jScrollPane2.setViewportView(lstProbabilidades);
+
+        jLabel15.setText("%");
+
+        limpiar.setText("Limpiar");
+        limpiar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                limpiarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
@@ -323,25 +343,26 @@ public class TransporteGUI extends javax.swing.JFrame {
             .addGroup(jPanel6Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 379, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
+                        .addComponent(jLabel12)
+                        .addGap(18, 18, 18)
+                        .addComponent(txtProb)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel13)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(addProbabilidad, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel6Layout.createSequentialGroup()
-                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel6Layout.createSequentialGroup()
-                                .addComponent(jLabel12)
-                                .addGap(18, 18, 18)
-                                .addComponent(txtProb))
-                            .addGroup(jPanel6Layout.createSequentialGroup()
-                                .addComponent(jLabel14)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtProbAcumulada, javax.swing.GroupLayout.DEFAULT_SIZE, 107, Short.MAX_VALUE)))
+                        .addComponent(jLabel14)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel13, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel15, javax.swing.GroupLayout.Alignment.TRAILING))
+                        .addComponent(lblProbAcumulada, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(lblCantidadProbabilidadesPendiente, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE)
-                            .addComponent(addProbabilidad, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addComponent(jLabel15)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lblCantidadProbabilidadesPendiente, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(limpiar)))
                 .addContainerGap())
         );
         jPanel6Layout.setVerticalGroup(
@@ -355,14 +376,17 @@ public class TransporteGUI extends javax.swing.JFrame {
                         .addComponent(jLabel13))
                     .addComponent(addProbabilidad, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel14)
-                    .addComponent(txtProbAcumulada, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel15)
-                    .addComponent(lblCantidadProbabilidadesPendiente))
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblProbAcumulada, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel14)
+                        .addComponent(lblCantidadProbabilidadesPendiente)
+                        .addComponent(jLabel15)))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(26, 26, 26))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(limpiar, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
@@ -382,7 +406,7 @@ public class TransporteGUI extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, 306, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -396,6 +420,11 @@ public class TransporteGUI extends javax.swing.JFrame {
         });
 
         simular.setText("Simular");
+        simular.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                simularActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -445,20 +474,69 @@ public class TransporteGUI extends javax.swing.JFrame {
             System.err.println("Se debe proporcionar un limite inferior y un limite superior\npara determinar el rango del intervalo.");
         }
         
-        System.out.println("lstProbabilidades: "+this.lstProbabilidades.getText());
-        setConfigMC(this.cantMC, this.intervaloMAX, this.intervaloMIN);
-        
+        setConfigMC();
         int nuevaCant = Integer.parseInt(this.lblCantidadProbabilidadesPendiente.getText());
-        if (!"0".equals(this.lblCantidadProbabilidadesPendiente.getText())) {
-            this.lstProbabilidades.setText(this.lstProbabilidades.getText()+"\n"+this.txtProb.getText());
+        if (!"0".equals(this.lblCantidadProbabilidadesPendiente.getText()) && Double.valueOf(this.lblProbAcumulada.getText())+Double.valueOf(this.txtProb.getText()) <= 100.0) {
+            // Si es la primera vez no pone nada al inicio de la lista, esto evita que ponga un "\n" al principio
+            if (String.valueOf(this.cantMC).equals(this.lblCantidadProbabilidadesPendiente.getText())) {
+                this.lstProbabilidades.setText(String.valueOf(this.cantAsc)+" - "+this.txtProb.getText());
+            } else {
+                this.lstProbabilidades.setText(this.lstProbabilidades.getText()+"\n"+String.valueOf(this.cantAsc)+" - "+this.txtProb.getText());
+            }
+            // Actualiza la probabilidad acumulada 
+            this.lblProbAcumulada.setText(String.valueOf(Double.valueOf(this.lblProbAcumulada.getText())+Double.valueOf(this.txtProb.getText())));
+            // Disminuye la etiqueta que muestra la cantidad pendiente de probabilidades a ingresar
             nuevaCant = Integer.parseInt(this.lblCantidadProbabilidadesPendiente.getText()) - 1;
+            this.cantAsc++;
+        } else {
+//            if (!"0".equals(this.lblCantidadProbabilidadesPendiente.getText())) {
+//                int cantPendiente = Integer.parseInt(this.lblCantidadProbabilidadesPendiente.getText());
+//                for (int i = 0; i < cantPendiente; i++) {
+//                    System.out.println("cant pendiente:" + cantPendiente + ", i:"+i);
+//                    String nTexto = this.txtProb.getText()+"\n0";
+//                    this.lstProbabilidades.setText(nTexto);
+//                }
+//            }
         }
+        
+        
         this.lblCantidadProbabilidadesPendiente.setText(String.valueOf(nuevaCant));
+        this.txtProb.setText("");
     }//GEN-LAST:event_addProbabilidadActionPerformed
 
     private void txtCantMCFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCantMCFocusLost
         this.lblCantidadProbabilidadesPendiente.setText(this.txtCantMC.getText());
     }//GEN-LAST:event_txtCantMCFocusLost
+
+    private void simularActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_simularActionPerformed
+        // Tomar todos los valores
+        // Parametros Semilla
+        this.V0 = !this.txtV0.getText().isEmpty() ? Integer.parseInt(this.txtV0.getText()) : 0;
+        this.V1 = !this.txtV1.getText().isEmpty()? Integer.parseInt(this.txtV1.getText()) : 0;
+        this.V2 = !this.txtV2.getText().isEmpty()? Integer.parseInt(this.txtV2.getText()) : 0;
+        this.a = !this.txtA.getText().isEmpty()? Integer.parseInt(this.txtA.getText()) : 17;
+        this.c = !this.txtC.getText().isEmpty()? Integer.parseInt(this.txtC.getText()) : 37;
+        this.k = !this.txtK.getText().isEmpty()? Integer.parseInt(this.txtK.getText()) : 100;
+        this.m = !this.txtM.getText().isEmpty()? Integer.parseInt(this.txtM.getText()) : 4000;
+        this.n = !this.txtN.getText().isEmpty()? Integer.parseInt(this.txtN.getText()) : 25;
+
+        
+        // Parametros de Marcas de clase
+        this.setConfigMC();
+        // Parametro cadena de probabilidades
+        this.probabilidades = this.lstProbabilidades.getText();
+        // Hace que el objeto que va a resolver el problema conozca parametros necesarios para la resolucion del problema
+        this.modelo.set_parametros(this.V0, this.V1, this.V2, this.a, this.c, this.k, this.m, this.n, this.probabilidades, this.cantMC, this.intervaloMAX, this.intervaloMIN);
+        Resultados r = new Resultados(this, this.modelo);
+        r.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_simularActionPerformed
+
+    private void limpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_limpiarActionPerformed
+        this.lstProbabilidades.setText("");
+        this.lblCantidadProbabilidadesPendiente.setText(this.txtCantMC.getText()); 
+        this.lblProbAcumulada.setText("");
+    }//GEN-LAST:event_limpiarActionPerformed
 
     private void configurar(String metodo_seleccionado)
     {
@@ -481,34 +559,54 @@ public class TransporteGUI extends javax.swing.JFrame {
             case "fibonacci":
                 parametros = u.getPARAMETROS_FIBONACCI();
                 break;
+            case "java":
+                System.out.println("Estoy entrando donde debo");
+                parametros = u.getPARAMETROS_JAVARANDOM();
+                break;
         }
         it = parametros.entrySet().iterator();
         while (it.hasNext()) {
             Entry<String, Boolean> e = it.next();
-            if ("v0".equals(e.getKey().toLowerCase())) 
-                if (e.getValue()) {this.txtV0.setText(""); this.txtV0.setEnabled(true);} else {this.txtV0.setText("0"); this.txtV0.setEnabled(false);}
-            else if ("v1".equals(e.getKey().toLowerCase())) 
-                if (e.getValue()) {this.txtV1.setText(""); this.txtV1.setEnabled(true);} else {this.txtV1.setText("0");this.txtV1.setEnabled(false);}
-            else if ("v2".equals(e.getKey().toLowerCase())) 
-                if (e.getValue()) {this.txtV2.setText(""); this.txtV2.setEnabled(true);} else {this.txtV2.setText("0");this.txtV2.setEnabled(false);}
-            else if ("a".equals(e.getKey().toLowerCase()))
-                if (e.getValue()) {this.txtA.setText(""); this.txtA.setEnabled(true);} else {this.txtA.setText("0");this.txtA.setEnabled(false);}
-            else if ("c".equals(e.getKey().toLowerCase()))
-                if (e.getValue()) {this.txtC.setText(""); this.txtC.setEnabled(true);} else {this.txtC.setText("0");this.txtC.setEnabled(false);}
-            else if ("k".equals(e.getKey().toLowerCase()))
-                if (e.getValue()) {this.txtK.setText(""); this.txtK.setEnabled(true);} else {this.txtK.setText("0");this.txtK.setEnabled(false);}
-            else if ("m".equals(e.getKey().toLowerCase()))
-                if (e.getValue()) {this.txtM.setText(""); this.txtM.setEnabled(true);} else {this.txtM.setText("0");this.txtM.setEnabled(false);}
-            else if ("n".equals(e.getKey().toLowerCase())) 
-                if (e.getValue()) {this.txtN.setText(""); this.txtN.setEnabled(true);} else {this.txtN.setText("0");this.txtN.setEnabled(false);}            
+            if (null != e.getKey().toLowerCase()) 
+                switch (e.getKey().toLowerCase()) {
+                case "v0":
+                    if (e.getValue()) {this.txtV0.setText(""); this.txtV0.setEnabled(true);} else {this.txtV0.setText("0"); this.txtV0.setEnabled(false);}
+                    break;
+                case "v1":
+                    if (e.getValue()) {this.txtV1.setText(""); this.txtV1.setEnabled(true);} else {this.txtV1.setText("0");this.txtV1.setEnabled(false);}
+                    break;
+                case "v2":
+                    if (e.getValue()) {this.txtV2.setText(""); this.txtV2.setEnabled(true);} else {this.txtV2.setText("0");this.txtV2.setEnabled(false);}
+                    break;
+                case "a":
+                    if (e.getValue()) {this.txtA.setText(""); this.txtA.setEnabled(true);} else {this.txtA.setText("0");this.txtA.setEnabled(false);}
+                    break;
+                case "c":
+                    if (e.getValue()) {this.txtC.setText(""); this.txtC.setEnabled(true);} else {this.txtC.setText("0");this.txtC.setEnabled(false);}            
+                    break;
+                case "k":
+                    if (e.getValue()) {this.txtK.setText(""); this.txtK.setEnabled(true);} else {this.txtK.setText("0");this.txtK.setEnabled(false);}
+                    break;
+                case "m":
+                    if (e.getValue()) {this.txtM.setText(""); this.txtM.setEnabled(true);} else {this.txtM.setText("0");this.txtM.setEnabled(false);}
+                    break;
+                case "n":
+                    if (e.getValue()) {this.txtN.setText(""); this.txtN.setEnabled(true);} else {this.txtN.setText("0");this.txtN.setEnabled(false);}
+                    break;
+                default:
+                    break;
+            }            
         }
+        
+        // Setea la lista de prob acumuladas en solo-lectura
+        this.lstProbabilidades.setEditable(false);
     }
 
-    private void setConfigMC(int cantMC, double IMax, double IMin)
+    private void setConfigMC()
     {
-        this.cantMC = this.txtCantMC.getText() != null ? Integer.parseInt(this.txtCantMC.getText()) : 0; // tambien se podria poner 6 para que por defecto resuelva el caso del escenario
-        this.intervaloMAX = new Double(this.txtIntMAX.getText());
-        this.intervaloMIN = new Double(this.txtIntMIN.getText());
+        this.cantMC = !this.txtCantMC.getText().isEmpty() ? Integer.parseInt(this.txtCantMC.getText()) : 6;
+        this.intervaloMAX = !this.txtIntMAX.getText().isEmpty() ? Double.parseDouble(this.txtIntMIN.getText()) : 540.0;
+        this.intervaloMIN = !this.txtIntMIN.getText().isEmpty() ? Double.parseDouble(this.txtIntMAX.getText()) : 860.0;
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addProbabilidad;
@@ -537,6 +635,8 @@ public class TransporteGUI extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JLabel lblCantidadProbabilidadesPendiente;
+    private javax.swing.JLabel lblProbAcumulada;
+    private javax.swing.JButton limpiar;
     private javax.swing.JTextArea lstProbabilidades;
     private javax.swing.JButton salir;
     private javax.swing.JButton simular;
@@ -549,7 +649,6 @@ public class TransporteGUI extends javax.swing.JFrame {
     private javax.swing.JTextField txtM;
     private javax.swing.JTextField txtN;
     private javax.swing.JTextField txtProb;
-    private javax.swing.JTextField txtProbAcumulada;
     private javax.swing.JTextField txtV0;
     private javax.swing.JTextField txtV1;
     private javax.swing.JTextField txtV2;
