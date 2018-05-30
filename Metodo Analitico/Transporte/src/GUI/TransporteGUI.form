@@ -305,7 +305,7 @@
                     <StringItem index="2" value="Multiplicativo"/>
                     <StringItem index="3" value="Mixto"/>
                     <StringItem index="4" value="Fibonacci"/>
-                    <StringItem index="5" value="Java"/>
+                    <StringItem index="5" value="Math.random()"/>
                   </StringArray>
                 </Property>
               </Properties>

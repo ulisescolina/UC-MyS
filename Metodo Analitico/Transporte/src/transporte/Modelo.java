@@ -5,11 +5,16 @@
  */
 package transporte;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map.Entry;
 import java.util.TreeMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import utilidades.Utilidades;
 
 /**
@@ -85,7 +90,7 @@ public class Modelo {
             case "fibonacci":
                 NAG = MGNA.metodoFibonacci(this.V1, this.V2, this.a, this.n);
                 break;
-            case "java":
+            case "math.random()":
                 NAG = MGNA.metodoJavaRandom(this.n);
                 break;
         }
@@ -122,9 +127,15 @@ public class Modelo {
         // Define/Actualiza la variable global
         this.freqObservadas = Utilidades.getFrecuenciasObservadasTM(this.CARGA, this.VECM);
         Iterator<Entry<String, Integer>> it= this.freqObservadas.entrySet().iterator();
+        int i = 0;
+        fo+="\t\tFrecuencia por Marca de Clase\n"+
+                "=========================================================\n"+
+                "Marca de Clase\t\tProbabilidad\t\tFrec. Observada\n"+
+                "=========================================================\n";
         while (it.hasNext()) {
             Entry<String, Integer> e = it.next();
-            fo += "Marca de clase: "+e.getKey()+", Frecuencia observada: "+String.valueOf(e.getValue()+"\n");
+            fo += String.format("%.2f\t\t%.2f\t\t"+String.valueOf(e.getValue())+"\n",Double.valueOf(e.getKey()),this.VECP[i]);
+            i++;
         }
         return fo;
     }
@@ -185,6 +196,26 @@ public class Modelo {
         // pudo realizar la escritura
         if (!Utilidades.escribirArchivo("eje_y_o", ejex, false)) {
             System.err.println("No se pudo escribir el archivo.");
+        }
+    }
+    
+    public void graficarResultados()
+    {
+        try {
+            String cadena;
+            ProcessBuilder pb  = new ProcessBuilder("grep", "");
+            // inicia el proceso
+            Process p = pb.start(); 
+            // obtiene stdout y lo guarda en salida
+            BufferedReader salida = new BufferedReader(new InputStreamReader(p.getInputStream()));
+            // coleccion que vamos a pasar a través del socket como objeto serializado
+            ArrayList<String> resultados = new ArrayList<>();
+            // imprime los valores obtenidos
+            while ((cadena = salida.readLine()) != null) {
+                resultados.add(cadena);
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(Modelo.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     

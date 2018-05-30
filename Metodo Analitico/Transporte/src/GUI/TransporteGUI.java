@@ -8,8 +8,6 @@ package GUI;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map.Entry;
-import javax.swing.DefaultListModel;
-import javax.swing.ListModel;
 import transporte.Modelo;
 
 /**
@@ -215,7 +213,7 @@ public class TransporteGUI extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        cmbMetodos.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Fundamental", "Aditivo", "Multiplicativo", "Mixto", "Fibonacci", "Java" }));
+        cmbMetodos.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Fundamental", "Aditivo", "Multiplicativo", "Mixto", "Fibonacci", "Math.random()" }));
         cmbMetodos.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 cmbMetodosItemStateChanged(evt);
@@ -559,8 +557,7 @@ public class TransporteGUI extends javax.swing.JFrame {
             case "fibonacci":
                 parametros = u.getPARAMETROS_FIBONACCI();
                 break;
-            case "java":
-                System.out.println("Estoy entrando donde debo");
+            case "math.random()":
                 parametros = u.getPARAMETROS_JAVARANDOM();
                 break;
         }
