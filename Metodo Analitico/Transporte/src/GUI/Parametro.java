@@ -17,7 +17,7 @@ public final class Parametro {
     private HashMap<String, Boolean> PARAMETROS_MULTIPLICATIVO = new HashMap<>();
     private HashMap<String, Boolean> PARAMETROS_MIXTO = new HashMap<>();
     private HashMap<String, Boolean> PARAMETROS_FIBONACCI = new HashMap<>();
-
+    private HashMap<String, Boolean> PARAMETROS_JAVARANDOM = new HashMap<>();
         
     public Parametro(){
         this.setPARAMETROS_FUNDAMENTAL();
@@ -83,6 +83,17 @@ public final class Parametro {
         this.PARAMETROS_FIBONACCI.put("m",false);
         this.PARAMETROS_FIBONACCI.put("n",true);
     }
+    
+    public void setPARAMETROS_JAVARANDOM() {
+        this.PARAMETROS_JAVARANDOM.put("v0",false);
+        this.PARAMETROS_JAVARANDOM.put("v1",false);
+        this.PARAMETROS_JAVARANDOM.put("v2",false);
+        this.PARAMETROS_JAVARANDOM.put("a",false);
+        this.PARAMETROS_JAVARANDOM.put("c",false);
+        this.PARAMETROS_JAVARANDOM.put("k",false);
+        this.PARAMETROS_JAVARANDOM.put("m",false);
+        this.PARAMETROS_JAVARANDOM.put("n",false);
+    }
 
     // Getter de todos los parametros
     public HashMap<String, Boolean> getPARAMETROS_FUNDAMENTAL() {
@@ -103,6 +114,10 @@ public final class Parametro {
 
     public HashMap<String, Boolean> getPARAMETROS_FIBONACCI() {
         return PARAMETROS_FIBONACCI;
+    }
+    
+    public HashMap<String, Boolean> getPARAMETROS_JAVARANDOM() {
+        return PARAMETROS_JAVARANDOM;
     }
 
 }
